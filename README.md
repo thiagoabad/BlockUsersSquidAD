@@ -35,4 +35,17 @@ Instalação / Compilação
 
 8 - Na linha 29 colocar a query que retorne os nomes de usuários
 
-9 - Colocar o script no agendador de tarefas do Windows
+9 - Compile o script com o AutoIt
+
+10 - Colocar o script no agendador de tarefas do Windows
+
+O Remove Bloqueio funciona para alguem que não tem acesso ao grupo diretamente possa remover um usuário do bloqueio.
+
+1 - Na linha 10 e 16 coloque uma senha de segurança para evitar acessos indesejados.
+
+2 - Na linha 40 coloque o nome do grupo no AD que irá conter os usuários bloqueados (default blocked)
+
+3 - Na linha 20 coloque um usuário que tenha permissão de escrita no grupo de usuários bloqueados.
+  3.1 Apesar da sugestão ser o administrador, não faça isso, crie um específico para esse fim.
+
+4 - Compile com o AutoIt
