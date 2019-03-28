@@ -8,6 +8,7 @@ Ele funciona executando uma query no banco de dados do sistema e adicionando ess
 Em um proxy squid deverá estar configurada uma ACL que boqueia totalmente o acesso dos usuários que pertencam a esse grupo à internet. Para melhor funionamento essa ACL deverá ser a primeira da lista.
 
 Requisitos:
+
 1 - MariaDB Connector ODBC
 https://downloads.mariadb.org/connector-odbc/
 
@@ -17,6 +18,7 @@ https://www.autoitscript.com/forum/files/file/355-ad-active-directory-udf/
 3 - Computador Windows pertencente ao AD
 
 Instalação / Compilação
+
 1 - Certifique-se que a máquina que irá executar o script está adiconada ao dominio desejado e que o usuário que irá executar o script tenha permissão de escrita no grupo dos usuários bloqueados
 
 2 - Crie um grupo no AD que irá conter os usuários bloqueados (default blocked)
