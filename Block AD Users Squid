@@ -1,0 +1,55 @@
+#AutoIt3Wrapper_AU3Check_Parameters= -d -w 1 -w 2 -w 3 -w 4 -w 5 -w 6
+#AutoIt3Wrapper_AU3Check_Stop_OnWarning=Y
+#include <AD.au3>
+#include <ButtonConstants.au3>
+#include <GUIConstantsEx.au3>
+#include <WindowsConstants.au3>
+#include <mysql.au3>
+
+; Script de colocar uma pessoa no bloqueio do Proxy
+
+; Abindo a conexao com AD
+_AD_Open()
+If @error Then Exit MsgBox(16, "Script de bloqueio de usuários", "Função _AD_Open encontrou um problema. @error = " & @error & ", @extended = " & @extended)
+_AD_ErrorNotify(2)
+
+;limpa as pessoas no grupo
+$aMembers = _AD_GetGroupMembers("blocked")
+For $vElement In $aMembers
+   $sSamAccountName = _AD_FQDNToSamAccountName($vElement)
+   $iValue = _AD_RemoveUserFromGroup("blocked", $sSamAccountName)
+Next
+
+; Primeiro passo
+; Verificar o MySQl para receber a lista de pessoas a serem bloqueadas
+
+$oConnectionObj = _MySQLConnect("usuariodeacessoaobancodedados", "senhadousuariodeacessoaobancodedados", "nomedobancodedados", "computadordobancodedados")
+If @error Then Exit MsgBox(16, "Script do Manager", "Função _MySQLConnect encontrou um problema. @error = " & @error & ", @extended = " & @extended)
+
+$sQuery = "select usuario from lista_de_nao_alocacoes"
+
+$result = _Query($oConnectionObj, $sQuery)
+
+$sMsg = ""
+
+For $oField In $result.Fields
+    $sMsg &= $oField.Name & @TAB
+Next
+$sMsg &= @CRLF
+
+While Not $result.EOF
+    For $oField in $result.Fields
+		 If ($oField.Value <> "IgnoredUser") Then
+		 $sMsg &= _AD_AddUserToGroup("blocked", $oField.Value)
+		 ;$sMsg &= $oField.Value & @TAB
+		 EndIf
+    Next
+    ;$sMsg &= @CRLF
+    $result.MoveNext
+WEnd
+$result.Close
+
+ConsoleWrite($sMsg)
+
+; Close Connection to the Active Directory
+_AD_Close()
